@@ -1,0 +1,53 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const project = new Schema({
+    projectAdmin:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Registration"
+    },
+    team:[
+        {
+            userId:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Registration"
+            }
+        }
+    ],
+    projectName:{
+        type:String,
+    },
+    projectType:{
+        type:String,
+    },
+    projectDescription:{
+        type:String,
+    },
+    dueDate:[
+        {
+            day:{
+                type:Number,
+            },
+            month:{
+                type:Number,
+            },
+            year:{
+                type:Number,
+            }
+        }
+    ],
+    initialDate:[
+        {
+            day:{
+                type:Number,
+            },
+            month:{
+                type:Number,
+            },
+            year:{
+                type:Number,
+            }
+        }
+    ]
+})
+module.exports=mongoose.model("project",project);
