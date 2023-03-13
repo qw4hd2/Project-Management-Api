@@ -5,7 +5,7 @@ exports.fetchRequestData = catchAsyncError(
     async(req, res, next) =>{
         const{requestTo}=req.body;
         try{
-            const fetchRequestData = await request.find({requestTo:requestTo}).populate({path:"projectAdmin"}).populate({path:"projectId"})
+            const fetchRequestData = await request.find({requestTo:requestTo}).populate({path:"projectAdmin",select:"userName"}).populate({path:"projectId",select:"projectName"})
             res.status(200).json(fetchRequestData)
         }catch(err){
             res.status(400).send(err.message)

@@ -1,6 +1,12 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const messageSchema = new Schema({
+    sender: { type: mongoose.Schema.Types.ObjectId, ref: 'Registration' },
+    text: { type: String, required: true },
+    createdAt: { type: Date, default: Date.now }
+});
+
 const project = new Schema({
     projectAdmin:{
         type:mongoose.Schema.Types.ObjectId,
@@ -48,6 +54,7 @@ const project = new Schema({
                 type:Number,
             }
         }
-    ]
+    ],
+    chat: { type: [messageSchema], default: [] }
 })
 module.exports=mongoose.model("project",project);

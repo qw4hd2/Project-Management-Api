@@ -10,6 +10,6 @@ const connectDatabase = () => {
         }).catch((err) => {
             console.log(err);
         })
-}
+}  
 
 module.exports = connectDatabase;

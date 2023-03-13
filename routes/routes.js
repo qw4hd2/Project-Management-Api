@@ -2,12 +2,14 @@ const express = require('express');
 const Registration = require('../models/Registration');
 const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
-const config = require("./../config/auth.config")
 const { signup,searchUser,getUser } = require('./../controllers/auth.controller')
-const {createProject,fetchAllProjectRelatedToUser,addMember,fetchAllProject,add,getProjectbyId,getMemberInProject} = require("./../controllers/projectController")
+const {createProject,fetchAllProjectRelatedToUser,addMember,fetchAllProject,add,getProjectbyId,getMemberInProject,joinProject,AddbyAdmin,groupChatting,getGroupChatting,fetchRequestbyUserID,deleteProject,LeaveProject,fileToUpload,deleteChat} = require("./../controllers/projectController")
 const {fetchRequestData,deleteIt} = require("./../controllers/requestController")
-const {createTaskForMembers,getTaskDetail} = require("./../controllers/taskController")
+const {createTaskForMembers,getTaskDetail,countTotalTaskDoneByMember,fetchUploadedDocuments} = require("./../controllers/taskController")
+const {fetchAllproject} = require("./../controllers/requestToAdminController.js");
+const {DeletechatbyAdmin} = require("./../middleware/chatDeletebyAdmin.js");
 const  checkUnique  = require("./../middleware/checkUniqueEntry")
+const multer  = require("./../middleware/multer");
 const router = express.Router();
 
 router.post("/auth/signup",checkUnique ,signup);
@@ -35,11 +37,23 @@ router.route('/user/search').get(searchUser);
 router.route("/project/member/:id").post(addMember);
 router.route("/user/:id").get(getUser);
 router.route("/fetch/fetchAllProduct").get(fetchAllProject);
-router.route("/add/:id").post(add);
+router.route("/add/:requestID").post(add);
 router.route("/requestData").post(fetchRequestData);
 router.route("/deleteRequest/:id").delete(deleteIt);
 router.route("/getProject/byAdmin/:id").get(getProjectbyId);
 router.route("/task/member/:id").post(createTaskForMembers);
 router.route("/fetch/task").get(getTaskDetail);
 router.route("/projects/:userId").get(getMemberInProject);
+router.route("/joinProject/joiner").post(joinProject);
+router.route("/requesttojoin/:adminId/:projectId").get(fetchAllproject);
+router.route("/admin/request/approval/:projectId/:requestId").post(AddbyAdmin);
+router.route('/projects/:projectId/chat').post(groupChatting);
+router.route("/getChat/:projectId/chat").get(getGroupChatting)
+router.route("/request/fetch/foruser/:requestUserId").get(fetchRequestbyUserID);
+router.route("/delete/project/:projectId").delete(deleteProject);
+router.route("/leave/project/:id/bymember/:userId").get(LeaveProject);
+router.post("/file/uploadfile/:projectId/:projectAdmin/:memberId",multer.array('image') ,fileToUpload);
+router.route("/tasks/count/:memberId/:projectId").get(countTotalTaskDoneByMember);
+router.route("/projects/:projectId/members/:memberId/tasks").get(fetchUploadedDocuments);
+router.get("/chatDetete/projectAdmin/:projectAdmin/projectId/:ProjectId",DeletechatbyAdmin,deleteChat)
 module.exports = router;
