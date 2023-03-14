@@ -15,3 +15,14 @@ exports.fetchAllproject = catchAsyncError(
           }
     }
 )
+exports.deteleRequestFromAdmin = catchAsyncError(
+  async(req , res,next)=>{
+    try{
+      const findIdRequest = await requestToJoinProject.findById(req.params.id);
+      findIdRequest.remove();
+      res.status(200).json("Request deleted");
+    }catch(err){
+      res.status(404).send(err.message);
+    }
+  }
+)

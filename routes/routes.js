@@ -6,7 +6,7 @@ const { signup,searchUser,getUser } = require('./../controllers/auth.controller'
 const {createProject,fetchAllProjectRelatedToUser,addMember,fetchAllProject,add,getProjectbyId,getMemberInProject,joinProject,AddbyAdmin,groupChatting,getGroupChatting,fetchRequestbyUserID,deleteProject,LeaveProject,fileToUpload,deleteChat} = require("./../controllers/projectController")
 const {fetchRequestData,deleteIt} = require("./../controllers/requestController")
 const {createTaskForMembers,getTaskDetail,countTotalTaskDoneByMember,fetchUploadedDocuments} = require("./../controllers/taskController")
-const {fetchAllproject} = require("./../controllers/requestToAdminController.js");
+const {fetchAllproject,deteleRequestFromAdmin} = require("./../controllers/requestToAdminController.js");
 const {DeletechatbyAdmin} = require("./../middleware/chatDeletebyAdmin.js");
 const  checkUnique  = require("./../middleware/checkUniqueEntry")
 const multer  = require("./../middleware/multer");
@@ -33,10 +33,10 @@ router.post('/auth/signin', async (req, res) => {
 });
 router.route("/create/newProject").post(createProject);
 router.route("/project/user/:projectAdmin").get(fetchAllProjectRelatedToUser);
-router.route('/user/search').get(searchUser);
+router.route('/user/search/project/:projectId/admin/:projectAdmin').get(searchUser);
 router.route("/project/member/:id").post(addMember);
 router.route("/user/:id").get(getUser);
-router.route("/fetch/fetchAllProduct").get(fetchAllProject);
+router.route("/fetch/fetchAllProduct/:id").get(fetchAllProject);
 router.route("/add/:requestID").post(add);
 router.route("/requestData").post(fetchRequestData);
 router.route("/deleteRequest/:id").delete(deleteIt);
@@ -56,4 +56,5 @@ router.post("/file/uploadfile/:projectId/:projectAdmin/:memberId",multer.array('
 router.route("/tasks/count/:memberId/:projectId").get(countTotalTaskDoneByMember);
 router.route("/projects/:projectId/members/:memberId/tasks").get(fetchUploadedDocuments);
 router.get("/chatDetete/projectAdmin/:projectAdmin/projectId/:ProjectId",DeletechatbyAdmin,deleteChat)
+router.route("/deleteRequestToadmin/rid/:id").delete(deteleRequestFromAdmin);
 module.exports = router;

@@ -230,7 +230,8 @@ exports.AddbyAdmin = catchAsyncError(
 exports.fetchAllProject = catchAsyncError(
     async (req, res, next) => {
         try {
-            const fetchAll = await Project.find().populate({ path: "projectAdmin", select: "_id userName" })
+            const fetchAll = await Project.find({ projectAdmin: { $ne: req.params.id } })
+                                          .populate({ path: "projectAdmin", select: "_id userName" })
             res.status(200).json(fetchAll)
         } catch (err) {
             res.status(400).json(err.message)
